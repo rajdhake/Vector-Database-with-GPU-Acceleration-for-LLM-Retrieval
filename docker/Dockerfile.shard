@@ -1,0 +1,12 @@
+# CPU-only base (small). For GPU, switch to nvidia/cuda:12.2.0-devel-ubuntu22.04
+FROM python:3.11-slim
+WORKDIR /app
+RUN apt-get update && apt-get install -y --no-install-recommends build-essential cmake && rm -rf /var/lib/apt/lists/*
+COPY shard/requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+COPY shard/ ./shard
+# Build pybind module only if CUDA is available (skipped in CPU image)
+# RUN cmake -B shard/build -S shard && cmake --build shard/build -j
+ENV PYTHONPATH=/app/shard/build
+EXPOSE 7001
+CMD ["uvicorn", "shard.server:app", "--host", "0.0.0.0", "--port", "7001"]

@@ -1,0 +1,52 @@
+version: "3.9"
+
+services:
+  coordinator:
+    image: vdb-coordinator
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.coordinator
+    environment:
+      - SHARDS=http://shard1:7001,http://shard2:7002
+      - PROMETHEUS_MULTIPROC_DIR=/tmp
+    ports:
+      - "8000:8000"
+    depends_on:
+      - shard1
+      - shard2
+
+  shard1:
+    image: vdb-shard
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.shard
+    environment:
+      - USE_CUDA=0  # set 1 for GPU
+    ports:
+      - "7001:7001"
+
+  shard2:
+    image: vdb-shard
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.shard
+    environment:
+      - USE_CUDA=0
+    ports:
+      - "7002:7002"
+
+# For GPU hosts, uncomment the following and start with: docker compose --profile gpu up -d
+#  shard1:
+#    deploy:
+#      resources:
+#        reservations:
+#          devices:
+#            - capabilities: [gpu]
+#    profiles: ["gpu"]
+#  shard2:
+#    deploy:
+#      resources:
+#        reservations:
+#          devices:
+#            - capabilities: [gpu]
+#    profiles: ["gpu"]
