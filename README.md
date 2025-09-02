@@ -2,6 +2,15 @@
 
 A mini distributed vector database: coordinator + N shards. Each shard keeps an in-memory matrix of embeddings and supports **GPU-accelerated cosine/L2 search** via CUDA (with CPU fallback). The coordinator handles **consistent-hash inserts** and **parallel fanout** for top-k search, and exposes a simple HTTP API. 
 
+<img width="823" height="680" alt="image" src="https://github.com/user-attachments/assets/c5f1d48c-b5df-479a-b530-6155b3c4d521" />
+
+
+<img width="1045" height="243" alt="image" src="https://github.com/user-attachments/assets/1b2f36ab-c4e6-4e4e-9ae2-cddcca739b52" />
+
+<img width="844" height="677" alt="image" src="https://github.com/user-attachments/assets/a077e04a-9f01-40d5-bfea-4fe948493d74" />
+
+
+
 ## Features
 - CUDA C++17 flat index (cosine/L2) wrapped with pybind11
 - Multithreaded shard server (FastAPI + uvicorn workers)
